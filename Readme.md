@@ -22,10 +22,17 @@ It is a way to get one software application to talk to another software applicat
 ### Direct Coding
 loadModuleLib("apibox", "api");
 
+$apiData = apibox_fetch($uriID, $getParams, $postData (if post), $addonParams (if required)])
+
+$apiData['error'] - Contains error messages
+$apiData['response'] - Contains response data
+
 ### Forms Integration
 
 
+
 ### Report Integration
+
 
 
 ### Infoview Integration

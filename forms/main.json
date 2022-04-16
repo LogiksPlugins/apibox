@@ -1,0 +1,94 @@
+{
+    "DEBUG":false,
+    "source":{
+        "type":"sql",
+        "table":"apibox_tbl",
+        "where": ["md5(id)"]
+    },
+    "gotolink":"infoview/apibox.apiboxfile/{hashid}?",
+    "fields":{
+        "title":{
+            "label":"Customer name",
+            "required":true,
+            "width":6
+        },
+        "category":{
+            "label":"Category",
+            "type": "text",
+            "required":true
+        }, 
+        "debug":{
+            "label":"Debug",
+            "type": "select",
+            "required":false,
+            "options":{
+		        "true":"True",
+		        "false":"False"
+		    }
+        },
+        "blocked": {
+			"label": "Blocked",
+			"type": "select",
+		    "required":true,
+		    "options":{
+		        "true":"True",
+		        "false":"False"
+		    }
+	     },
+	    "cache":{
+            "label":"Cache",
+            "type": "text",
+            "required":true
+        },
+        "format":{
+            "label":"Format",
+            "type": "text",
+            "required":true
+        },
+        "method":{
+            "label":"Method",
+            "type": "text",
+            "required":true
+        },
+        "end_point":{
+            "label":"End Point",
+            "type": "text",
+            "required":true
+        },
+        "authorization":{
+            "label":"Authorization",
+            "type": "text",
+            "required":true
+        },
+        "input_validation":{
+            "label":"Input Validation",
+            "type": "text",
+            "required":false
+        },
+        "params":{
+            "label":"Params",
+            "type": "text",
+            "required":false
+        },
+        "headers":{
+            "label":"Headers",
+            "type": "text",
+            "required":false
+        },
+        "body":{
+            "label":"Body",
+            "type": "text",
+            "required":false
+        },
+        "output_transformation":{
+            "label":"Output Transformation",
+            "type": "text",
+            "required":false
+        },
+        "remarks":{
+            "label":"Remarks",
+            "type": "text",
+            "required":true
+        }
+    }
+}
