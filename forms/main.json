@@ -1,94 +1,161 @@
 {
+    "title": "APIBox List",
+    "category": "APIBox",
     "DEBUG":false,
     "source":{
         "type":"sql",
         "table":"apibox_tbl",
         "where": ["md5(id)"]
     },
-    "gotolink":"infoview/apibox.apiboxfile/{hashid}?",
+    "gotolink":"infoview/apibox.main/{hashid}?",
     "fields":{
         "title":{
-            "label":"Customer name",
+            "label": "API Name",
             "required":true,
             "width":6
         },
         "category":{
-            "label":"Category",
+            "label":"API Family/Category",
+            "required":true,
             "type": "text",
-            "required":true
+            "width":6
         }, 
         "debug":{
             "label":"Debug",
             "type": "select",
-            "required":false,
+            "required":true,
             "options":{
 		        "true":"True",
 		        "false":"False"
-		    }
+		    },
+            "width":4
         },
-        "blocked": {
-			"label": "Blocked",
-			"type": "select",
-		    "required":true,
-		    "options":{
-		        "true":"True",
-		        "false":"False"
-		    }
-	     },
-	    "cache":{
-            "label":"Cache",
-            "type": "text",
-            "required":true
+	    "use_cache":{
+            "label":"Use Cache",
+            "type": "select",
+            "required":true,
+            "options":{
+                "true":"True",
+                "false":"False"
+            },
+            "width":4
+        },
+        "use_mock": {
+            "label":"Use Mock",
+            "type": "select",
+            "required":true,
+            "options":{
+                "true":"True",
+                "false":"False"
+            },
+            "width":4
         },
         "format":{
             "label":"Format",
-            "type": "text",
-            "required":true
+            "type": "select",
+            "required":true,
+            "options":{
+                "raw":"raw",
+                "json":"json",
+                "xml":"xml",
+                "binary":"binary"
+            },
+            "width":4
         },
         "method":{
             "label":"Method",
-            "type": "text",
-            "required":true
+            "type": "select",
+            "required":true,
+            "options":{
+                "GET":"GET",
+                "POST":"POST",
+                "PUT":"PUT",
+                "DELETE":"DELETE"
+            },
+            "width":4
+        },
+        "blocked": {
+            "label": "Blocked",
+            "type": "select",
+            "required":true,
+            "options":{
+                "true":"True",
+                "false":"False"
+            },
+            "vmode": "edit",
+            "width":4
         },
         "end_point":{
-            "label":"End Point",
+            "label":"End Point (URL/URI)",
             "type": "text",
-            "required":true
+            "required":true,
+            "width":12
+        },
+        "remarks":{
+            "label":"Remarks",
+            "type": "textarea",
+            "required":true,
+            "width":12
+        },
+        "headers":{
+            "label":"Headers",
+            "group":"Headers",
+            "type": "textarea",
+            "default": "{}",
+            "required":false,
+            "width":12
         },
         "authorization":{
             "label":"Authorization",
+            "group":"Headers",
+            "type": "select",
+            "required":true,
+            "default": "",
+            "options":{
+                "":"None",
+                "Bearer":"Bearer"
+            }
+        },
+        "authorization_token":{
+            "label":"Authorization",
+            "group":"Headers",
             "type": "text",
             "required":true
         },
         "input_validation":{
             "label":"Input Validation",
-            "type": "text",
+            "group":"Input",
+            "type": "textarea",
+            "default": "{}",
             "required":false
         },
         "params":{
-            "label":"Params",
-            "type": "text",
-            "required":false
-        },
-        "headers":{
-            "label":"Headers",
-            "type": "text",
+            "label":"GET Params",
+            "group":"Input",
+            "type": "textarea",
+            "default": "{}",
             "required":false
         },
         "body":{
-            "label":"Body",
-            "type": "text",
+            "label":"POST Body",
+            "group":"Input",
+            "type": "textarea",
+            "default": "{}",
             "required":false
         },
         "output_transformation":{
             "label":"Output Transformation",
-            "type": "text",
+            "group":"Output",
+            "type": "textarea",
+            "default": "{}",
             "required":false
         },
-        "remarks":{
-            "label":"Remarks",
-            "type": "text",
-            "required":true
+        "mockdata": {
+            "label":"Mock Data",
+            "group":"Output",
+            "type": "textarea",
+            "default": "{}",
+            "required":false  
         }
     }
 }

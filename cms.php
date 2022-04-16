@@ -1,9 +1,12 @@
 <?php
 if(!defined('ROOT')) exit('No direct script access allowed');
 
+header("Location:"._link("modules/reports/apibox.main"));
+exit();
+
 loadModule("pages");
 
-function pageContentArea() {//Change Log Since : <span id='dated'>".date("d/m/Y H:i:s")."</span>
+function pageContentArea() {
     return "<div class='container table-responsive'>
     <h2 id='changeLogTitle'></h2>
     <ul id='changeLogBody' class='list-group'>
