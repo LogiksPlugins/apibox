@@ -1,12 +1,11 @@
 {
-    "title": "API Viewer",
+    "title": "API Creator",
     "category": "APIBox",
     "DEBUG":false,
     "source":{
         "type":"sql",
         "table":"apibox_tbl",
-        "where": ["id"],
-        "refcol": "id"
+        "where": ["md5(id)"]
     },
     "gotolink1":"infoview/apibox.main/{hashid}?",
     "gotolink":"apibox/runAPI/{hashid}?",
@@ -166,17 +165,6 @@
             "default": "{}",
             "width":12,
             "required":false  
-        },
-        "blocked":{
-            "label":"Blocked",
-            "type": "select",
-            "required":true,
-            "options":{
-                "true":"True",
-                "false":"False"
-            },
-            "width":4,
-            "default": "false"
         }
     }
 }

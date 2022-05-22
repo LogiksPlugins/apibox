@@ -1,6 +1,6 @@
 {
 	"schema": "1.0",
-	"title": "APIBox List",
+	"title": "APIBox<citie>Manage all 3rd Party API at one place</citie>",
 	"category": "APIBox",
 	"privilege": "*",
 	"blocked": false,
@@ -10,6 +10,7 @@
 	"custombar": false,
 	"uiswitcher": false,
     "DEBUG":false,
+    "script": "apibox",
 	"source": {
 		"type": "sql",
 		"table": "apibox_tbl",
@@ -20,28 +21,49 @@
 	    "limit": 20
 	},
 	"actions": {    
-	    "forms@apibox.main/new/{hashid}": {
+	    "page@modules/forms/apibox.creator/new": {
 			"label": "Register New API",
 			"icon": "fa fa-plus"
 		}
 	},
 	"buttons": {
-		"infoview@apibox.main/{hashid}": {
-			"label": "View API Details",
-			"icon": "fa fa-chevron-right",
+		"page@modules/apibox/runAPI/{id}": {
+			"label": "Run API",
+			"icon": "fa fa-play",
+			"class": "pull-left btn"
+		},
+		"codeSample": {
+			"label": "Code Sample",
+			"icon": "fa fa-code",
+			"class": "pull-left btn"
+		},
+
+		"cloneAPI": {
+			"label": "Clone API",
+			"icon": "fa fa-copy",
 			"class": "btn"
 		},
-		"forms@apibox.main/edit/{hashid}": {
-			"label": "Edit API Details",
+		
+		"page@modules/forms/apibox.editor/edit/{id}": {
+			"label": "Edit API",
 			"icon": "fa fa-pencil",
+			"class": "btn"
+		}
+	},
+	"buttons_old": {
+		"popup@infoview/apibox.main/{id}": {
+			"label": "View API Details",
+			"icon": "fa fa-chevron-right",
 			"class": "btn"
 		}
 	},
 	"sidebar":{
         "type":"list",
+        "no_records":"No APIs Found",
+        "all_records":"All APIs",
         "source":{
-            "apibox_tbl.category":{
-                "type": "sql",
+        	"apibox_tbl.category":{
+        		"type": "sql",
 				"table": "apibox_tbl",
 				"cols": "category as title, category as value",
 				"where":{
@@ -49,21 +71,6 @@
 				    "category IS NOT NULL AND length(category)>0":"RAW"
 				},
 				"groupby":"category"
-            }
-        }
-	},
-	"smartfilter1":{
-        "type":"list",
-        "source":{
-            "apibox_tbl.method":{
-                "type": "sql",
-				"table": "apibox_tbl",
-				"cols": "method as title, method as value, count(*) as counter",
-				"where":{
-				    "blocked":"false",
-				    "method IS NOT NULL AND length(method)>0":"RAW"
-				},
-				"groupby":"method"
             }
         }
 	},
@@ -94,59 +101,6 @@
 				}
 			}
 		},
-		"debug": {
-			"label": "Debug",
-			"searchable": true,
-			"sortable": true,
-			"hidden": false,
-			"filter": {
-				"type":"select",
-				"options":{
-					"true":"True",
-					"false":"False"
-				}
-			}
-		},
-		"use_cache": {
-			"label": "Use Cache",
-			"searchable": true,
-			"sortable": true,
-			"hidden": false,
-			"filter": {
-				"type":"select",
-				"options":{
-					"true":"True",
-					"false":"False"
-				}
-			}
-		},
-		"use_mock": {
-			"label": "Use Mock",
-			"searchable": true,
-			"sortable": true,
-			"hidden": false,
-			"filter": {
-				"type":"select",
-				"options":{
-					"true":"True",
-					"false":"False"
-				}
-			}
-		},
-		"format": {
-			"label": "Format",
-			"searchable": true,
-			"sortable": true,
-			"hidden": false,
-			"filter":{
-				"type":"createDataSelectorFromUniques",
-				"table":"apibox_tbl",
-				"col1":"format",
-				"where":{
-					"blocked":"false"
-				}
-			}
-		},
 		"method": {
 			"label": "Method",
 			"searchable": true,
@@ -168,8 +122,14 @@
 			"hidden": true,
 			"formatter1": "url"
 		},
-		"blocked": {
-			"label": "blocked",
+		"subpath": {
+			"label": "Subpath/Slug",
+			"searchable": true,
+			"sortable": true,
+			"hidden": true
+		},
+		"debug": {
+			"label": "Debug",
 			"searchable": true,
 			"sortable": true,
 			"hidden": false,
@@ -181,26 +141,88 @@
 				}
 			}
 		},
+		"use_cache": {
+			"label": "Use Cache",
+			"searchable": true,
+			"sortable": true,
+			"hidden": false,
+			"formatter": "checkbox",
+			"filter": {
+				"type":"select",
+				"options":{
+					"true":"True",
+					"false":"False"
+				}
+			}
+		},
+		"use_mock": {
+			"label": "Use Mock",
+			"searchable": true,
+			"sortable": true,
+			"hidden": false,
+			"formatter": "checkbox",
+			"filter": {
+				"type":"select",
+				"options":{
+					"true":"True",
+					"false":"False"
+				}
+			}
+		},
+		"format": {
+			"label": "Format",
+			"searchable": true,
+			"sortable": true,
+			"hidden": false,
+			"formatter": "checkbox",
+			"filter":{
+				"type":"createDataSelectorFromUniques",
+				"table":"apibox_tbl",
+				"col1":"format",
+				"where":{
+					"blocked":"false"
+				}
+			}
+		},
+		"blocked": {
+			"label": "Blocked",
+			"searchable": true,
+			"sortable": true,
+			"hidden": false,
+			"filter": {
+				"type":"select",
+				"options":{
+					"true":"True",
+					"false":"False"
+				}
+			}
+		},
+		"last_run": {
+			"label": "Last Run",
+			"searchable": true,
+			"sortable": true,
+			"hidden": false
+		},
 		"created_on": {
-			"label": "created_on",
+			"label": "Created On",
 			"searchable": true,
 			"sortable": true,
 			"hidden": false
 		},
 		"created_by": {
-			"label": "created_by",
+			"label": "Created By",
 			"searchable": true,
 			"sortable": true,
 			"hidden": false
 		},
 		"edited_on": {
-			"label": "edited_on",
+			"label": "Updated On",
 			"searchable": true,
 			"sortable": true,
 			"hidden": false
 		},
 		"edited_by": {
-			"label": "edited_by",
+			"label": "Updated By",
 			"searchable": true,
 			"sortable": true,
 			"hidden": false

@@ -1,5 +1,5 @@
 {
-    "title": "API Viewer",
+    "title": "APIBox List",
     "category": "APIBox",
     "DEBUG":false,
     "source":{
@@ -169,6 +169,7 @@
         },
         "blocked":{
             "label":"Blocked",
+            "group":"More",
             "type": "select",
             "required":true,
             "options":{

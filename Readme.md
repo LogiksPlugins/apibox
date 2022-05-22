@@ -22,10 +22,22 @@ It is a way to get one software application to talk to another software applicat
 ### Direct Coding
 loadModuleLib("apibox", "api");
 
-$apiData = apibox_fetch($uriID, $getParams, $postData (if post), $addonParams (if required)])
+$apiData = apibox_run($uriID, $getParams, $postData (if post/put), $addonParams (if required)])
 
 $apiData['error'] - Contains error messages
 $apiData['response'] - Contains response data
+
+
+### Use Cases
++ Manual/Developer/Module->apibox
++ bizRules->apibox
++ automator->apibox
++ datacontrols(forms/reports/infoview/infovisuals/dashboards)->apibox
+
+
+### DataControl Integration (Forms, Reports, Infoview, Infovisuals, Dashboards, etc)
+
+
 
 ### Forms Integration
 
