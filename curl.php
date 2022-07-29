@@ -13,7 +13,7 @@ if(!function_exists("apibox_get")) {
             if(is_array($temp)) {
                 $temp1 = [];
                 foreach($temp as $a=>$b) {
-                    $temp1[] = "{$a}: {$b}";
+                    $temp1[] = "{$a}: "._replace($b);
                 }
                 $headers = array_merge($headers, $temp1);
             } else {
@@ -34,7 +34,7 @@ if(!function_exists("apibox_get")) {
         if($authorizationParams) {
             switch ($authorizationParams['type']) {
                 case 'Bearer':
-                    return "Authorization: Bearer ".implode(":", $authorizationParams['data']);
+                    return "Authorization: Bearer ".implode(":", _replace($authorizationParams['data']));
                     break;
             }
         }
