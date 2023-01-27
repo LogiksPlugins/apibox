@@ -59,6 +59,7 @@ if(!function_exists("apibox_get")) {
             }
         }
         $targetURL = str_replace("??", "?", $targetURL);
+        $_SESSION['APIBOX_LAST_URL'] = $targetURL;
         
         $headers = apibox_curl_headers($apiInfo);
 
@@ -117,6 +118,7 @@ if(!function_exists("apibox_get")) {
             }
         }
         $targetURL = str_replace("??", "?", $targetURL);
+        $_SESSION['APIBOX_LAST_URL'] = $targetURL;
         
         $headers = apibox_curl_headers($apiInfo);
 
@@ -191,6 +193,7 @@ if(!function_exists("apibox_get")) {
             }
         }
         $targetURL = str_replace("??", "?", $targetURL);
+        $_SESSION['APIBOX_LAST_URL'] = $targetURL;
         
         $headers = apibox_curl_headers($apiInfo);
 
@@ -263,6 +266,7 @@ if(!function_exists("apibox_get")) {
             }
         }
         $targetURL = str_replace("??", "?", $targetURL);
+        $_SESSION['APIBOX_LAST_URL'] = $targetURL;
         
         $headers = apibox_curl_headers($apiInfo);
 
@@ -335,6 +339,7 @@ if(!function_exists("apibox_get")) {
             }
         }
         $targetURL = str_replace("??", "?", $targetURL);
+        $_SESSION['APIBOX_LAST_URL'] = $targetURL;
         
         $headers = apibox_curl_headers($apiInfo);
 

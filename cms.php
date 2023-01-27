@@ -6,16 +6,7 @@ if(_db()) {
 
 		$slug = _slug("a/mode/refid");
 
-		switch($slug['mode']) {
-			case "runAPI":
-				include_once __DIR__."/pages/run_api.php";
-			break;
-			// case "codeSample":
-			// 	include_once __DIR__."/pages/code_sample.php";
-			// break;
-			default:
-				header("Location:"._link("modules/reports/apibox.main"));
-		}
+		include_once __DIR__."/pages/home.php";
 	} else {
 		echo "<h2 align=center><br><br>Plugin is not properly installed, try installing the plugin again.</h2>";
 	}

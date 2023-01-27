@@ -12,16 +12,21 @@
     "gotolink":"apibox/runAPI/{hashid}?",
     "reportlink": "modules/apibox",
     "fields":{
+        "slug":{
+            "label": "API Key (Space and Symbols not allowed)",
+            "required":true,
+            "width":3
+        },
         "title":{
             "label": "API Name",
             "required":true,
-            "width":6
+            "width":5
         },
         "category":{
             "label":"API Family/Category",
             "required":true,
             "type": "autosuggest",
-            "width":6
+            "width":4
         }, 
         "method":{
             "label":"Method",

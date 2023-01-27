@@ -1,6 +1,8 @@
 <?php
 if(!defined('ROOT')) exit('No direct script access allowed');
 
+$slug = _slug("a/mode/refid");
+
 if(strlen($slug['refid'])<=0) {
 	echo "<h2 align=center><br>API Reference Missing</h2>";
 	return;
@@ -35,6 +37,8 @@ if($uriInfo['body'] && is_array($uriInfo['body']) && isset($uriInfo['body']['dat
 	$tempBody = json_encode($uriInfo['body']['data'], true);
 }
 
+$htmlTab_Nav = "";
+$htmlTab_Body = "";
 
 $htmlBody = "";
 
@@ -43,12 +47,24 @@ $htmlBody .= "<div class='form-group col-md-6'>
 			    <textarea required name='data[\"headers\"]' class='form-control'>{$tempHeaders}</textarea>
 			    <small class='form-text text-muted'>JSON object for parameters passed in HEADERS</small>
 			</div>";
+$htmlTab_Nav .= "<li role='presentation' class='active'><a href='#headers' aria-controls='headers' role='tab' data-toggle='tab'>Headers</a></li>";
+$htmlTab_Body .= "<div role='tabpanel' class='tab-pane active' id='headers'>
+				<textarea required name='data[\"headers\"]' class='form-control'>{$tempHeaders}</textarea>
+			    <small class='form-text text-muted'>JSON object for parameters passed in HEADERS</small>
+			</div>";
+
 
 $htmlBody .= "<div class='form-group col-md-6'>
 			    <label>GET Parameters *</label>
 			    <textarea required name='data[\"params\"]' class='form-control'>{$tempParams}</textarea>
 			    <small class='form-text text-muted'>JSON object for parameters passed in URL</small>
 			</div>";
+$htmlTab_Nav .= "<li role='presentation'><a href='#getparams' aria-controls='getparams' role='tab' data-toggle='tab'>Get Params</a></li>";
+$htmlTab_Body .= "<div role='tabpanel' class='tab-pane' id='getparams'>
+			    <textarea required name='data[\"params\"]' class='form-control'>{$tempParams}</textarea>
+			    <small class='form-text text-muted'>JSON object for parameters passed in URL</small>
+			</div>";
+
 
 switch(strtoupper($uriInfo['method'])) {
 	case 'GET':
@@ -60,11 +76,21 @@ switch(strtoupper($uriInfo['method'])) {
 			    <textarea required name='data[\"body\"]' class='form-control'>{$tempBody}</textarea>
 			    <small class='form-text text-muted'>JSON object for parameters passed in BODY</small>
 			</div>";
+		$htmlTab_Nav .= "<li role='presentation'><a href='#postparams' aria-controls='postparams' role='tab' data-toggle='tab'>Post Params</a></li>";
+		$htmlTab_Body .= "<div role='tabpanel' class='tab-pane' id='postparams'>
+				<textarea required name='data[\"body\"]' class='form-control'>{$tempBody}</textarea>
+			    <small class='form-text text-muted'>JSON object for parameters passed in BODY</small>
+			</div>";
 		break;
 	case 'PUT':
 		$htmlBody .= "<div class='form-group col-md-6'>
 			    <label>PUT Body *</label>
 			    <textarea required name='data[\"body\"]' class='form-control'>{$tempBody}</textarea>
+			    <small class='form-text text-muted'>JSON object for parameters passed in BODY</small>
+			</div>";
+		$htmlTab_Nav .= "<li role='presentation'><a href='#putparams' aria-controls='putparams' role='tab' data-toggle='tab'>Put Params</a></li>";
+		$htmlTab_Body .= "<div role='tabpanel' class='tab-pane' id='putparams'>
+				<textarea required name='data[\"body\"]' class='form-control'>{$tempBody}</textarea>
 			    <small class='form-text text-muted'>JSON object for parameters passed in BODY</small>
 			</div>";
 		break;
@@ -74,11 +100,21 @@ switch(strtoupper($uriInfo['method'])) {
 			    <textarea required name='data[\"body\"]' class='form-control'>{$tempBody}</textarea>
 			    <small class='form-text text-muted'>JSON object for parameters passed in BODY</small>
 			</div>";
+		$htmlTab_Nav .= "<li role='presentation'><a href='#patchparams' aria-controls='patchparams' role='tab' data-toggle='tab'>Patch Params</a></li>";
+		$htmlTab_Body .= "<div role='tabpanel' class='tab-pane' id='patchparams'>
+				<textarea required name='data[\"body\"]' class='form-control'>{$tempBody}</textarea>
+			    <small class='form-text text-muted'>JSON object for parameters passed in BODY</small>
+			</div>";
 		break;
 	case 'DELETE':
 		$htmlBody .= "<div class='form-group col-md-6'>
 			    <label>DELETE Body *</label>
 			    <textarea required name='data[\"body\"]' class='form-control'>{$tempBody}</textarea>
+			    <small class='form-text text-muted'>JSON object for parameters passed in BODY</small>
+			</div>";
+		$htmlTab_Nav .= "<li role='presentation'><a href='#deleteparams' aria-controls='deleteparams' role='tab' data-toggle='tab'>Delete Params</a></li>";
+		$htmlTab_Body .= "<div role='tabpanel' class='tab-pane' id='deleteparams'>
+				<textarea required name='data[\"body\"]' class='form-control'>{$tempBody}</textarea>
 			    <small class='form-text text-muted'>JSON object for parameters passed in BODY</small>
 			</div>";
 		break;
@@ -106,15 +142,19 @@ pre pre {
 	<div class='run_api_form'>
 		<form>
 			<input type='hidden' name='API_ID' value='<?=$uriID?>' />
-			<br>
-			<h3 class='text-center'>
-				<i class="fa fa-chevron-left pull-left goto_list cursor_pointer" title='Back to List'></i>
-				Running API
-				<i class="fa fa-pencil fa-pencil-alt pull-right goto_editor cursor_pointer" title='Edit API'></i>
-			</h3>
+			<h3 class='text-center'>API Runner</h3>
 			<br>
 			<div class="form-group">
-			    <static class="form-control"><?=$uriInfo['title']?></static>
+			    <div class='row1'>
+			    	<div class='col-md-9' style="padding: 0px;">
+			    		<static class="form-control"><?=$uriInfo['title']?></static>
+			    	</div>
+			    	<div class='col-md-3' style="padding: 0px;">
+			    		<select id='enviromentList' name='enviroment' class='form-control select'>
+							<option value=''>Loading ...</option>
+						</select>
+			    	</div>
+			    </div>
 			    <small class="form-text text-muted"><?="<b>{$uriInfo['method']}</b> {$uriInfo['end_point']}{$uriInfo['subpath']}"?></small>
 			</div>
 			<div class="form-group">
@@ -122,12 +162,20 @@ pre pre {
 				<label class='label_checkbox'><input type="checkbox" name='show_mock' value='true' /> Show Mock</label>
 			</div>
 			<div class='row'>
-				<?=$htmlBody?>
+				<div class='col-md-12'>
+					<ul class="nav nav-tabs" role="tablist">
+						<?=$htmlTab_Nav?>
+						
+					</ul>
+					<div class="tab-content">
+						<?=$htmlTab_Body?>
+					</div>
+				 </div>
 			</div>
 			<hr>
 			<div class='text-center'>
 				<button type="reset" class="btn btn-danger">Reset</button>
-				<button type="button" class="btn btn-primary">RUN</button>
+				<button type="button" class="btn btn-success btn-run">RUN</button>
 			</div>
 		</form>
 		<pre id='responseBody' class='hidden d-none'></pre>
@@ -135,13 +183,14 @@ pre pre {
 </div>
 <script>
 $(function() {
-	$(".goto_list").click(function() {
-		window.location = _link("modules/apibox");
-	});
-	$(".goto_editor").click(function() {
-		window.location = _link("modules/forms/apibox.editor/edit/<?=$uriID?>");
-	});
-	$(".btn-primary").click(runAPI);
+	processAJAXQuery(_service("apibox", "envList"), function(data) {
+		$("#enviromentList").html("");
+    	$.each(data.Data, function(a,b) {
+    		$("#enviromentList").append(`<option value="${b}">${b}</option>`);
+    	})
+	}, "json")
+	
+	$(".btn-run").click(runAPI);
 });
 function runAPI() {
 	$("#responseBody").removeClass("hidden").removeClass("d-none");
@@ -160,12 +209,14 @@ function runAPI() {
 		return;
 	}
 
-
 	$("#responseBody").html("<div class='ajaxloading ajaxloading5'>Processing ...</div>");
 	processAJAXPostQuery(_service("apibox", "runAPI"), $("form").serialize(), function(responseData) {
 		$("#responseBody").html(responseData);
 	}, function() {
 		$("#responseBody").html("<h3 align=center>Error while running API</h3>");
 	});
+}
+function editActiveAPI() {
+	window.location = _link("modules/forms/apibox.editor/edit/<?=$uriID?>");
 }
 </script>

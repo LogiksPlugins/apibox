@@ -11,6 +11,9 @@
 	"uiswitcher": false,
     "DEBUG":false,
     "script": "apibox",
+    "topbar": {
+    	"uitype": "type1"
+    },
 	"source": {
 		"type": "sql",
 		"table": "apibox_tbl",
@@ -20,14 +23,14 @@
 		},
 	    "limit": 20
 	},
-	"actions": {    
+	"actions1": {    
 	    "page@modules/forms/apibox.creator/new": {
 			"label": "Register New API",
 			"icon": "fa fa-plus"
 		}
 	},
 	"buttons": {
-		"page@modules/apibox/runAPI/{id}": {
+		"page@modules/apibox/runner/{id}": {
 			"label": "Run API",
 			"icon": "fa fa-play",
 			"class": "pull-left btn"

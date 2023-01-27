@@ -3,6 +3,7 @@ CREATE TABLE `apibox_tbl` (
   `guid` varchar(155) DEFAULT 'global', 
   `groupuid` varchar(55) NOT NULL DEFAULT 'hq', 
   `title` varchar(155) NOT NULL, 
+  `slug` varchar(55) NOT NULL,
   `category` varchar(155) NOT NULL, 
   `debug` enum('false','true') NOT NULL DEFAULT 'false', 
   `use_cache` enum('false','true') NOT NULL DEFAULT 'false', 

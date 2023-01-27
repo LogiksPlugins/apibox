@@ -15,6 +15,11 @@ if(!function_exists("apibox_list")) {
                 "md5(id)"=>$uriID,
                 "blocked"=>"false"
             ])->_GET();
+        } elseif(!is_numeric($uriID)) {
+            $uriInfo = _db()->_selectQ("apibox_tbl", "*", [
+                "slug"=>$uriID,
+                "blocked"=>"false"
+            ])->_GET();
         } else {
             $uriInfo = _db()->_selectQ("apibox_tbl", "*", [
                 "id"=>$uriID,
@@ -188,13 +193,60 @@ if(!function_exists("apibox_list")) {
         
         if(substr($slug, 0, 1)!="/") $slug="/{$slug}";
 
-        return $apiInfo['uri'].$slug;
+        $finalURI = $apiInfo['uri'].$slug."/{XXX}";
+
+        $finalURI = str_replace("{", "#", str_replace("}", "#", $finalURI));
+
+        $finalURI = _replace($finalURI);
+
+        return $finalURI;
+    }
+
+    function apibox_environment($envKey = false, $reset = false) {
+        if(!$envKey) $envKey = strtolower(getConfig("APPS_STATUS"));
+        else $envKey = strtolower($envKey);
+
+        if(isset($_SESSION['APIBOX_ENIVRONMENT'])) {
+            if($reset) {
+                unset($_SESSION['APIBOX_ENIVRONMENT']);
+            } elseif(isset($_SESSION['APIBOX_ENIVRONMENT'][$envKey])) {
+                return $_SESSION['APIBOX_ENIVRONMENT'][$envKey];
+            } else {
+                return [];
+            }
+        }
+
+        $file = (defined("CMS_APPROOT")?CMS_APPROOT:APPROOT)."config/apibox.json";
+        $APIBOX_ENVIRONMENT = [];
+        if(file_exists($file)) {
+            $configJSON = json_decode(file_get_contents($file), true);
+            if($configJSON && isset($configJSON['environment'])) {
+                $APIBOX_ENVIRONMENT = $configJSON['environment'];
+            }
+        }
+        
+        $_SESSION['APIBOX_ENIVRONMENT'] = $APIBOX_ENVIRONMENT;
+
+        if(isset($_SESSION['APIBOX_ENIVRONMENT'][$envKey])) {
+            return $_SESSION['APIBOX_ENIVRONMENT'][$envKey];
+        } else {
+            return [];
+        }
     }
     
-    function apibox_run($uriID, $getParams, $postData = [], $addonParams = []) {
+    function apibox_run($uriID, $getParams, $postData = [], $addonParams = [], $restEnv = false) {
         $apiInfo = apibox_info($uriID);
         if(!$apiInfo) return ["error"=>"URI ID not found"];
         
+        $apiEnv = apibox_environment($restEnv);
+        $apiEnvOther = [];
+        foreach($apiEnv as $a=>$b) {
+            if(!is_array($b)) {
+                if(isset($_REQUEST[$a])) $apiEnvOther[$a] = $_REQUEST[$a];
+                $_REQUEST[$a] = $b;
+            }
+        }
+
         //Validate Get Params : If Applicable
         //$getParams = 
         
@@ -227,6 +279,16 @@ if(!function_exists("apibox_list")) {
         }
         $dataOriginal = $data;
 
+        foreach($apiEnv as $a=>$b) {
+            if(!is_array($b)) {
+                if(isset($apiEnvOther[$a])) {
+                    $_REQUEST[$a] = $apiEnvOther[$a];
+                } elseif(isset($_REQUEST[$a])) {
+                    unset($_REQUEST[$a]);
+                }
+            }
+        }
+
         //Log API Call
         apibox_log($uriID, $getParams, $postData, $addonParams, $dataOriginal);
 
@@ -241,6 +303,9 @@ if(!function_exists("apibox_list")) {
 
     //Array/String Output
     function apibox_process_dataobject($dataObject) {
+        if(!isset($dataObject['type'])) {
+            return $dataObject;
+        }
         switch($dataObject['type']) {
             case "data":
                 return $dataObject['data'];
@@ -257,23 +322,31 @@ if(!function_exists("apibox_list")) {
         }
     }
 
-    function apibox_log($uriID, $getParams, $payload, $addonParams, $responseData) {
-        // $dated = date("Y-m-d H:i:s");
-        // _db("log")->_insertQ1("apibox_logs",[
-        //         "guid"=>$_SESSION['SESS_GUID'],
-        //         "groupuid"=>$_SESSION['SESS_GROUP_NAME'],
-        //         "reference"=>$callReference,
-        //          "status"=>$status,
-        //         "service_id"=>$cmdScript['id'],
-        //         "output_log"=>$response,
-        //         "payload"=>json_encode($payload),
-        //         "created_by"=>$_SESSION['SESS_USER_ID'],
-        //         "created_on"=>$dated,
-        //         "edited_by"=>$_SESSION['SESS_USER_ID'],
-        //         "edited_on"=>$dated,
-        //     ])->_RUN();
-        
-        // return $response;
+    function apibox_log($uriID, $getParams, $payload, $addonParams, $responseData, $status = "NA") {
+        if(!isset($_SESSION['APIBOX_LOGTABLE_FOUND'])) {
+            if(in_array("apibox_logs", _db("log")->get_tableList())) {
+                $_SESSION['APIBOX_LOGTABLE_FOUND']  =true;
+            } else {
+                $_SESSION['APIBOX_LOGTABLE_FOUND'] = false;
+            }
+        }
+        if($_SESSION['APIBOX_LOGTABLE_FOUND']) {
+            $dated = date("Y-m-d H:i:s");
+            _db("log")->_insertQ1("apibox_logs",[
+                    "guid"=>$_SESSION['SESS_GUID'],
+                    "groupuid"=>$_SESSION['SESS_GROUP_NAME'],
+                    "api_id"=>$uriID,
+                    "status"=>$status,
+                    "payload"=>json_encode($payload),
+                    "params"=>json_encode($getParams),
+                    "response"=>is_array($responseData)?json_encode($responseData):$responseData,
+                    "addon_params"=>json_encode($addonParams),
+                    "created_by"=>$_SESSION['SESS_USER_ID'],
+                    "created_on"=>$dated,
+                    "edited_by"=>$_SESSION['SESS_USER_ID'],
+                    "edited_on"=>$dated,
+                ])->_RUN();
+        }
     }
 }
 ?>
