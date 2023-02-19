@@ -26,5 +26,5 @@ function codeSample(row) {
 		
 	// });
 
-	lgksAlert(`<pre style=''>loadModule("apibox");\n\n$response = apibox_run(${refid}, $getParameters, $payload);</pre>`, "Code Preview");
+	lgksAlert(`<pre style=''>loadModuleLib("apibox", "api");\n\n$response = apibox_run(${refid}, $getParameters, $payload);</pre>`, "Code Preview");
 }

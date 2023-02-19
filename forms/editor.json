@@ -11,6 +11,7 @@
     "gotolink1":"infoview/apibox.main/{hashid}?",
     "gotolink":"apibox/runAPI/{hashid}?",
     "reportlink": "modules/apibox",
+    "template": "accordion",
     "fields":{
         "slug":{
             "label": "API Key (Space and Symbols not allowed)",
