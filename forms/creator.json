@@ -8,7 +8,7 @@
         "where": ["md5(id)"]
     },
     "gotolink1":"infoview/apibox.main/{hashid}?",
-    "gotolink":"apibox/runAPI/{hashid}?",
+    "gotolink":"apibox/runner/{hashid}?",
     "reportlink": "modules/apibox",
     "template": "wizard",
     "fields":{

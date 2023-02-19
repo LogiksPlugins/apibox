@@ -17,7 +17,7 @@
 	"source": {
 		"type": "sql",
 		"table": "apibox_tbl",
-		"cols": "id,guid,groupuid,title,category,debug,use_cache,use_mock,format,method,end_point,blocked,created_on,created_by,edited_on,edited_by",
+		"cols": "id,guid,groupuid,title,slug,category,debug,use_cache,use_mock,format,method,end_point,blocked,created_on,created_by,edited_on,edited_by",
 		"where": {
 			
 		},
@@ -86,6 +86,12 @@
 		},
 		"title": {
 			"label": "API Name",
+			"searchable": true,
+			"sortable": true,
+			"hidden": false
+		},
+		"slug": {
+			"label": "API Key",
 			"searchable": true,
 			"sortable": true,
 			"hidden": false
@@ -191,7 +197,7 @@
 			"label": "Blocked",
 			"searchable": true,
 			"sortable": true,
-			"hidden": false,
+			"hidden": true,
 			"filter": {
 				"type":"select",
 				"options":{
@@ -210,25 +216,25 @@
 			"label": "Created On",
 			"searchable": true,
 			"sortable": true,
-			"hidden": false
+			"hidden": true
 		},
 		"created_by": {
 			"label": "Created By",
 			"searchable": true,
 			"sortable": true,
-			"hidden": false
+			"hidden": true
 		},
 		"edited_on": {
 			"label": "Updated On",
 			"searchable": true,
 			"sortable": true,
-			"hidden": false
+			"hidden": true
 		},
 		"edited_by": {
 			"label": "Updated By",
 			"searchable": true,
 			"sortable": true,
-			"hidden": false
+			"hidden": true
 		}
 	}
 }
