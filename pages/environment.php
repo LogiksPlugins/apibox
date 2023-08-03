@@ -39,7 +39,7 @@ echo _js("vue");
 		<ul id='environment_list' class='list-group'>
 			<template v-if="items.length > 0">
 				<template v-for="item in items">
-					<li class='list-group-item' :data-refid="item" @click="loadEnvItem"><i class='fa fa-folder'></i> {{ item }}</li>
+					<li class='list-group-item' :data-refid="item" @click="loadEnvItem"><i class='fa fa-code'></i> {{ item }}</li>
 				</template>
 				<li class='list-group-item create-item' @click="createEnvItem">Create Environment</li>
 			</template>
@@ -104,9 +104,16 @@ $(function() {
 		    },
 		    async saveEnvItem(btn) {
 		    	var _CURRENT_APP = this;
-		    	processAJAXPostQuery(_service("apibox", "saveData"), "env="+_CURRENT_APP.currentItem+"&data="+_CURRENT_APP.envData,function(data) {
-			    	lgksToast(data.Data.msg);
-				}, "json")
+
+		    	try {
+		    		JSON.parse(_CURRENT_APP.envData);
+
+		    		processAJAXPostQuery(_service("apibox", "saveData"), "env="+_CURRENT_APP.currentItem+"&data="+_CURRENT_APP.envData,function(data) {
+				    	lgksToast(data.Data.msg);
+					}, "json")
+		    	} catch(e) {
+		    		lgksAlert(e.message);
+		    	}
 		    },
 		    async createEnvItem(btn) {
 		    	var _CURRENT_APP = this;

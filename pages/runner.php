@@ -137,6 +137,9 @@ pre pre {
 	border: 0px;
 	padding: 0px;
 }
+textarea.form-control {
+	min-height: 200px;
+}
 </style>
 <div class='container'>
 	<div class='run_api_form'>
